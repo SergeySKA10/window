@@ -73,7 +73,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 
 
-const tabs = () => {};
+const tabs = (tabsSelector, contentsSelector, parentSelector, activeClass) => {
+  const tabs = document.querySelectorAll(tabsSelector);
+  const contents = document.querySelectorAll(contentsSelector);
+  const parentTabs = document.querySelector(parentSelector);
+  function hideTabsContent() {
+    tabs.forEach(item => {
+      item.classList.remove(activeClass);
+    });
+    contents.forEach(item => {
+      item.style.display = 'none';
+    });
+  }
+  function showTabs(i = 0) {
+    contents[i].style.display = 'block';
+    tabs[i].classList.add(activeClass);
+  }
+  hideTabsContent();
+  showTabs();
+  parentTabs.addEventListener('click', e => {
+    if (e.target && e.target.classList.contains(tabsSelector.replace(/\./, '')) || e.target.parentNode.classList.contains(tabsSelector.replace(/\./, ''))) {
+      tabs.forEach((item, i) => {
+        if (e.target === item || e.target.parentNode === item) {
+          hideTabsContent();
+          showTabs(i);
+        }
+      });
+    }
+  });
+
+  // bindTabs('.decoration_item div', '.decoration_item div a', '.decoration_option', '.decoration_slider'); 
+  // bindTabs('.glazing_block img', '.glazing_block a', '.glazing_content', '.glazing_slider');
+};
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tabs);
 
 /***/ }),
@@ -13998,7 +14029,8 @@ __webpack_require__.r(__webpack_exports__);
 
 window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])();
-  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])();
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content > div > div', '.decoration_slider', 'after_click');
+  (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.glazing_slider', 'active');
 });
 })();
 
