@@ -1,4 +1,8 @@
 'use strict';
+function closeModal(modal) {
+    modal.style.display = 'none';
+    document.body.style.overflow = '';
+}
 
 const modal = () => {
     function bindModal(triggerSelector, modalSelector, closeSelector) {
@@ -34,11 +38,6 @@ const modal = () => {
         });
     }
 
-    function closeModal(modal) {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-
     function showModalByTime(selector, time) {
         setTimeout(() => {
             document.querySelector(selector).style.display = 'block';
@@ -52,3 +51,4 @@ const modal = () => {
 }
 
 export default modal;
+export {closeModal};

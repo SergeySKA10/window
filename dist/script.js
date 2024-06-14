@@ -1,6 +1,75 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./src/js/modules/forms.js":
+/*!*********************************!*\
+  !*** ./src/js/modules/forms.js ***!
+  \*********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _modal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modal */ "./src/js/modules/modal.js");
+
+
+
+const form = () => {
+  const forms = document.querySelectorAll('form'),
+    message = {
+      loading: 'Загрузка',
+      fail: 'Произошла ошибка',
+      complite: 'Спасибо! Скоро с Вами свяжется наш специалист'
+    },
+    inputs = document.querySelectorAll('input'),
+    phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+  phoneInputs.forEach(item => {
+    item.addEventListener('input', () => {
+      item.value = item.value.replace(/\D/, '');
+    });
+  });
+  const postData = async (url, form) => {
+    document.querySelector('.status').textContent = message.loading;
+    const formData = new FormData(form),
+      response = await fetch(url, {
+        method: "POST",
+        body: formData
+      });
+    if (!response.ok) {
+      throw new Error(`Could not fetch: ${url}, status: ${response.status}`);
+    }
+    return await response.text();
+  };
+  const clearInputs = () => {
+    inputs.forEach(input => {
+      input.value = '';
+    });
+  };
+  forms.forEach(form => {
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const status = document.createElement('div');
+      status.classList.add('status');
+      form.append(status);
+      postData('assets/server.php', form).then(data => {
+        status.textContent = message.complite;
+        console.log(data);
+      }).catch(error => {
+        status.textContent = message.fail;
+        console.error(error);
+      }).finally(() => {
+        clearInputs();
+        setTimeout(() => status.remove(), 3000);
+      });
+    });
+  });
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (form);
+
+/***/ }),
+
 /***/ "./src/js/modules/modal.js":
 /*!*********************************!*\
   !*** ./src/js/modules/modal.js ***!
@@ -10,10 +79,15 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   closeModal: () => (/* binding */ closeModal),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 
 
+function closeModal(modal) {
+  modal.style.display = 'none';
+  document.body.style.overflow = '';
+}
 const modal = () => {
   function bindModal(triggerSelector, modalSelector, closeSelector) {
     const trigger = document.querySelectorAll(triggerSelector),
@@ -42,10 +116,6 @@ const modal = () => {
       closeModal(modal);
     });
   }
-  function closeModal(modal) {
-    modal.style.display = 'none';
-    document.body.style.overflow = '';
-  }
   function showModalByTime(selector, time) {
     setTimeout(() => {
       document.querySelector(selector).style.display = 'block';
@@ -57,6 +127,7 @@ const modal = () => {
   showModalByTime('.popup', 60000);
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (modal);
+
 
 /***/ }),
 
@@ -101,9 +172,6 @@ const tabs = (tabsSelector, contentsSelector, parentSelector, activeClass) => {
       });
     }
   });
-
-  // bindTabs('.decoration_item div', '.decoration_item div a', '.decoration_option', '.decoration_slider'); 
-  // bindTabs('.glazing_block img', '.glazing_block a', '.glazing_content', '.glazing_slider');
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tabs);
 
@@ -14022,6 +14090,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _slider__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./slider */ "./src/js/slider.js");
 /* harmony import */ var _modules_modal__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/modal */ "./src/js/modules/modal.js");
 /* harmony import */ var _modules_tabs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./modules/tabs */ "./src/js/modules/tabs.js");
+/* harmony import */ var _modules_forms__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./modules/forms */ "./src/js/modules/forms.js");
+
 
 
 
@@ -14031,6 +14101,7 @@ window.addEventListener('DOMContentLoaded', () => {
   (0,_modules_modal__WEBPACK_IMPORTED_MODULE_1__["default"])();
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.no_click', '.decoration_content > div > div', '.decoration_slider', 'after_click');
   (0,_modules_tabs__WEBPACK_IMPORTED_MODULE_2__["default"])('.glazing_block', '.glazing_content', '.glazing_slider', 'active');
+  (0,_modules_forms__WEBPACK_IMPORTED_MODULE_3__["default"])();
 });
 })();
 
