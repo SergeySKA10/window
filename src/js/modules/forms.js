@@ -1,8 +1,8 @@
 'use strict';
 
-import { closeModal } from "./modal";
+//import { closeModal } from "./modal";
 
-const form = () => {
+const form = (state) => {
     const forms = document.querySelectorAll('form'),
           message = {
             loading: 'Загрузка',
@@ -18,13 +18,12 @@ const form = () => {
         });
     })
     
-    const postData = async (url, form) => {
+    const postData = async (url, data) => {
         document.querySelector('.status').textContent = message.loading;
 
-        const formData = new FormData(form),
-              response = await fetch(url, {
+        const response = await fetch(url, {
             method: "POST",
-            body: formData
+            body: data
         });
 
         if (!response.ok) {
@@ -49,7 +48,15 @@ const form = () => {
 
             form.append(status);
 
-            postData('assets/server.php', form)
+            const formData = new FormData(form);
+
+            if (form.getAttribute('data-calc') === 'end') {
+                for (let key in state) {
+                    formData.append(key, state[key]);
+                }
+            }
+
+            postData('assets/server.php', formData)
                 .then(data => {
                     status.textContent = message.complite;
                     console.log(data);
