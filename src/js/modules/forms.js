@@ -1,6 +1,7 @@
 'use strict';
 
-//import { closeModal } from "./modal";
+import { closeModal } from "./modal";
+import validateInput from "./validateInput";
 
 const form = (state) => {
     const forms = document.querySelectorAll('form'),
@@ -9,14 +10,9 @@ const form = (state) => {
             fail: 'Произошла ошибка',
             complite: 'Спасибо! Скоро с Вами свяжется наш специалист'
           },
-          inputs = document.querySelectorAll('input'),
-          phoneInputs = document.querySelectorAll('input[name="user_phone"]');
+          inputs = document.querySelectorAll('input');
 
-    phoneInputs.forEach(item => {
-        item.addEventListener('input', () => {
-            item.value = item.value.replace(/\D/, '');
-        });
-    })
+    validateInput('input[name="user_phone"]');
     
     const postData = async (url, data) => {
         document.querySelector('.status').textContent = message.loading;
@@ -67,8 +63,16 @@ const form = (state) => {
                 })
                 .finally(() => {
                     clearInputs();
-                    setTimeout(() => status.remove(), 3000);
-                })
+                    setTimeout(() => {
+                        status.remove();
+                        closeModal();
+                        for (let key in state) {
+                            delete state[key];
+                        }
+                        state.form = 0;
+                        state.type = 'tree';
+                    }, 3000);
+                });
         });
 
             
