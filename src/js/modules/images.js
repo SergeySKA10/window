@@ -1,6 +1,6 @@
 'use strict';
 
-const images = () => {
+const images = (scroll) => {
     const worksSpace = document.querySelector('.works'),
           imgPopup = document.createElement('div'),
           imgBig = document.createElement('img');
@@ -24,6 +24,7 @@ const images = () => {
         if(e.target && e.target.classList.contains('preview')) {
             imgPopup.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            document.body.style.marginRight = `${scroll}px`;
 
             let href = e.target.parentNode.getAttribute('href');
             imgBig.setAttribute('src', href);
@@ -32,6 +33,7 @@ const images = () => {
         if (e.target.matches('.popup_images')) {
             imgPopup.style.display = 'none';
             document.body.style.overflow = '';
+            document.body.style.marginRight = `0px`;
         }
     });
 }

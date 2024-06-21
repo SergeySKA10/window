@@ -1,24 +1,28 @@
 'use strict';
-function closeModal() {
+function closeModal(scroll) {
     const windows = document.querySelectorAll('[data-modal]');
     
     windows.forEach(item => {
         item.style.display = 'none';
     });
     document.body.style.overflow = '';
+
+    document.body.style.marginRight = '0px';
 }
 
-function openModal(selector, timerID) {
+function openModal(selector, scroll, timerID) {
     const modal = document.querySelector(selector);
     modal.style.display = 'block';
     document.body.style.overflow = 'hidden';
+
+    document.body.style.marginRight = `${scroll}px`;
     
     if (timerID) {
         clearInterval(timerID);
     }
 }
 
-const modal = (timerID) => {
+const modal = (timerID, scroll) => {
     function bindModal(triggerSelector, modalSelector, closeSelector, closeClickOverlay = true) {
         const trigger = document.querySelectorAll(triggerSelector),
               modal = document.querySelector(modalSelector),
@@ -42,7 +46,7 @@ const modal = (timerID) => {
                     if (countInputValue === inputs.length)  {
                             inputs.forEach(item => item.style.border = '');
                             closeModal();
-                            openModal(modalSelector);
+                            openModal(modalSelector, scroll);
                     }     
 
                 } else if (triggerSelector == '.popup_calc_profile_button') {
@@ -60,29 +64,29 @@ const modal = (timerID) => {
                             item.checked = false;
                         });
                         closeModal();
-                        openModal(modalSelector);
+                        openModal(modalSelector, scroll);
                     }
                 } else {
                     closeModal();
-                    openModal(modalSelector, timerID);
+                    openModal(modalSelector, scroll, timerID);
                 }
             });
         });
 
         modal.addEventListener('click', (e) => {
             if (e.target === modal && closeClickOverlay) {
-                closeModal();
+                closeModal(scroll);
             }
         });
 
         document.addEventListener('keydown', (e) => {
             if (e.code === 'Escape') {
-                closeModal();
+                closeModal(scroll);
             }
         });
 
         close.addEventListener('click', () => {
-            closeModal();
+            closeModal(scroll);
         });
     }
 

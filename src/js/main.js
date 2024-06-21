@@ -12,7 +12,26 @@ import images from './modules/images';
 
 window.addEventListener('DOMContentLoaded', () => {
 
-    const showModalByTime = setTimeout(() => openModal('.popup', showModalByTime), 6000);
+    function calcScroll() {
+        let div = document.createElement('div');
+        div.style.width = '50px';
+        div.style.height = '50px';
+        div.style.overflowY = 'scroll';
+        div.style.visibility = 'hidden';
+        
+        
+        document.body.append(div);
+
+        let scrollWidth = div.offsetWidth - div.clientWidth;
+        
+        div.remove();
+
+        return scrollWidth;
+    }
+    
+    const scroll = calcScroll();
+    
+    const showModalByTime = setTimeout(() => openModal('.popup', scroll, showModalByTime), 60000);
     
     let modalState = {
         form: 0,
@@ -21,11 +40,11 @@ window.addEventListener('DOMContentLoaded', () => {
         deadline = '2024-06-25';
 
     changeModalState(modalState);
-    modal(showModalByTime);
+    modal(showModalByTime, scroll);
     tabs('.no_click', '.decoration_content > div > div', '.decoration_slider', 'after_click');
     tabs('.glazing_block', '.glazing_content', '.glazing_slider', 'active');
     tabs('.balcon_icons_img', '.big_img > img', '.balcon_icons', 'do_image_more', 'inline-block');
     forms(modalState);
     timer('.sale', deadline);
-    images();
+    images(scroll);
 });
