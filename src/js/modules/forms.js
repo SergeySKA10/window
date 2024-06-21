@@ -67,10 +67,12 @@ const form = (state) => {
                         status.remove();
                         closeModal();
                         for (let key in state) {
-                            delete state[key];
+                            if (key === 'form' || key === 'type') {
+                                continue;
+                            } else {
+                                delete state[key];
+                            } 
                         }
-                        state.form = 0;
-                        state.type = 'tree';
                     }, 3000);
                 });
         });

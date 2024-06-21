@@ -7,6 +7,7 @@ import forms from './modules/forms';
 import changeModalState from './modules/changeModalState';
 import timer from './modules/timer';
 import { openModal } from './modules/modal';
+import images from './modules/images';
 
 
 window.addEventListener('DOMContentLoaded', () => {
@@ -26,4 +27,5 @@ window.addEventListener('DOMContentLoaded', () => {
     tabs('.balcon_icons_img', '.big_img > img', '.balcon_icons', 'do_image_more', 'inline-block');
     forms(modalState);
     timer('.sale', deadline);
+    images();
 });
